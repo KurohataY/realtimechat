@@ -1,0 +1,262 @@
+@charset "UTF-8";
+
+html {
+  font-size: 1em; /* 16px */
+  line-height: 1.5; /* 24px */
+}
+
+body {
+  color: #212121;
+  background-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 
+    "Segoe UI", "Roboto", "Droid Sans", sans-serif;
+}
+
+/**
+ * navbarのメニュー
+ */
+
+/* ドロップダウンの各項目 */
+.dropdown-menu li a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all .1s;
+}
+
+/* 画面右上角の自分のユーザ名 */
+.menu-profile-name {
+  margin-right: 6px;
+}
+
+/* 画面右上角の自分のプロフィール画像を上下中央に */
+.navbar-nav > li > a.menu-profile {
+  padding-top: 2px;
+  padding-bottom: 0;
+}
+
+
+/* すべての画面を最初は表示しない */
+.view {
+  display: none;
+}
+
+/**
+ * 最初のローディング表示
+ */
+
+#loading {
+  display: block;
+  position: relative;
+  height: 100vh;
+}
+
+.initial-loading-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -25px;
+  margin-left: -23px;
+  font-size: 46px;
+  animation: spin 2s linear infinite;
+}
+
+/* 回転するアニメーション */
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/**
+ * ログイン画面
+ */
+
+#login {
+  padding-top: 51px;
+}
+
+.login__help {
+  display: none;
+}
+
+.login__password-reset-button {
+  margin-left: 5px;
+}
+
+
+/**
+ * チャット画面
+ */
+
+#chat {
+  padding-top: 51px;
+}
+
+.message-template,
+.favorite-template {
+  display: none;
+}
+
+.main-pane {
+}
+
+.message-list {
+  max-width: 650px;
+  min-height: calc(100vh - 51px - 46px + 6px);
+  margin: 0 auto 40px auto;
+  padding: 10px 10px 6px 10px;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: #ccc;
+  background-color: #f7f7ff;
+}
+
+.message {
+  clear: both;
+}
+
+.message__user-name {
+  font-size: 0.8rem;
+}
+
+.message__body {
+  position: relative;
+  width: 75%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #e7e7e7;
+}
+
+.message__text,
+.favorite__text {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.message__info,
+.favorite__info {
+  text-align: right;
+}
+
+.message__time,
+.favorite__time {
+  font-size: 0.8rem;
+  color: #787878;
+}
+
+.message--received .message__body {
+  background-color: #e7e7e7;
+}
+
+.message--sent .message__body {
+  background-color: #d9f3d8;
+}
+
+.message--received .message__profile,
+.message--received .message__body {
+  float: left;
+}
+
+.message--sent .message__profile,
+.message--sent .message__body {
+  float: right;
+}
+
+.message--received .message__profile {
+  margin-right: 18px;
+}
+
+.message--sent .message__profile {
+  margin-left: 18px;
+}
+
+.message--received .message__body {
+  border-radius: 0 6px 6px 6px;
+}
+
+/* 三角形の耳 */
+.message--received .message__body:before {
+  position: absolute;
+  top: 0;
+  left: -10px;
+  content: " ";
+  border-width: 10px 0 0 10px;
+  border-style: solid;
+  border-color: #e7e7e7 transparent;
+}
+
+.message--sent .message__body {
+  border-radius: 6px 0 6px 6px;
+}
+
+/* 三角形の耳 */
+.message--sent .message__body:after {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  content: " ";
+  border-width: 10px 10px 0 0;
+  border-style: solid;
+  border-color: #d9f3d8 transparent;
+}
+
+.comment-form {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+
+/**
+ * ルーム作成モーダル
+ */
+
+.create-room__help {
+  display: none;
+}
+
+
+/**
+ * ルーム削除モーダル
+ */
+
+.delete-room__name {
+  font-weight: bold;
+}
+
+
+/**
+ * パスワードリセットモーダル
+ */
+
+.password-reset__help {
+  display: none;
+}
+
+
+/**
+ * ユーザ情報設定モーダル
+ */
+
+.settings-profile-image-loading-container {
+  display: none;
+  position: relative;
+  width: 46px;
+  height: 46px;
+}
+
+.settings-profile-image-loading-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -12px;
+  margin-left: -12px;
+  font-size: 24px;
+  animation: spin 2s linear infinite;
+}

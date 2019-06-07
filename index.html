@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Realtime Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- 自サイトのCSS -->
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    
+    <div class="favorite-template">
+      <!-- お気に入り表示用のテンプレート -->
+      <li class="list-group-item">
+        <div class="media">
+          <div class="media-left">
+            <img class="media-object favorite__user-image" src="img/default-profile-image.png" width="46" height="46" alt="ユーザ画像">
+          </div>
+          <div class="media-body">
+            <div class="favorite__user-name"></div>
+            <div class="favorite__text"></div>
+            <div class="favorite__info"><span class="favorite__time"></span></div>
+          </div>
+        </div>
+      </li><!-- /.list-group-item -->
+    </div><!-- /.favorite-template -->
+
+    <div class="message-template">
+      <!-- 受信メッセージのテンプレート -->
+      <div class="message message--received">
+        <div class="message__profile">
+          <img class="message__user-image" src="img/default-profile-image.png" width="46" height="46" alt="プロフィール画像">
+        </div>
+        <div class="message__body">
+          <div class="message__user-name"></div>
+          <div class="message__text"></div>
+          <div class="message__info"><a href="#" class="message__favorite-link"><span class="message__favorite glyphicon glyphicon-star-empty"></span></a><span class="message__time"></span></div>
+        </div>
+      </div><!-- /.message -->
+
+      <!-- 送信メッセージのテンプレート -->
+      <div class="message message--sent">
+        <div class="message__profile">
+          <a href="#settingsModal" data-toggle="modal"><img class="message__user-image" src="img/default-profile-image.png" width="46" height="46" alt="プロフィール画像"></a>
+        </div>
+        <div class="message__body">
+          <div class="message__user-name"></div>
+          <div class="message__text"></div>
+          <div class="message__info"><a href="#" class="message__favorite-link"><span class="message__favorite glyphicon glyphicon-star-empty"></span></a><span class="message__time"></span></div>
+        </div>
+      </div><!-- /.message -->
+    </div>
+
+    <!-- ルーム作成モーダル -->
+    <div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form id="create-room-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">ルーム作成</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group create-room__room-name">
+                <label for="room-name" class="control-label">ルーム名を入力してください</label>
+                <input type="text" class="form-control" id="room-name" required>
+              </div>
+              <div class="alert alert-danger create-room__help"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+              <button type="submit" class="btn btn-primary">作成</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /#createRoomModal -->
+
+    <!-- ルーム削除モーダル -->
+    <div class="modal fade" id="deleteRoomModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">ルーム削除</h4>
+          </div>
+          <div class="modal-body">
+            <span class="delete-room__name"></span> を削除しますか？ ルーム内のすべてのメッセージも削除されます。
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+            <button type="button" class="btn btn-danger delete-room__button">削除</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /#deleteRoomModal -->
+
+    <!-- ユーザ情報設定モーダル -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">設定</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal settings-form">
+              <div class="form-group">
+                <label for="settings-nickname" class="col-sm-3 control-label">ニックネーム</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="settings-nickname" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="settings-profile-image" class="col-sm-3 control-label">プロフィール画像</label>
+                <div class="col-sm-6">
+                  <input type="file" accept=".jpg,.jpeg,.png,.gif, image/jpeg,image/png,image/gif" class="form-control" id="settings-profile-image">
+                </div>
+                <div class="col-sm-2">
+                  <label for="settings-profile-image"><img class="settings-profile-image-preview" src="img/default-profile-image.png" width="46" height="46" alt="プロフィール画像"></label>
+                  <div class="settings-profile-image-loading-container"><span class="settings-profile-image-loading-icon glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /#settingsModal -->
+    
+    <!-- お気に入り一覧モーダル -->
+    <div class="modal fade" id="favoritesListModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title">お気に入り一覧</h4>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group favorite-list">
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /#favoritesListModal -->
+
+    <!-- 最初のローディング表示 -->
+    <section id="loading" class="view">
+      <span class="initial-loading-icon glyphicon glyphicon-refresh" aria-hidden="true"></span>
+    </section><!-- /#loading -->
+
+    <!-- ログイン画面 -->
+    <section id="login" class="view">
+      <div class="container">
+        <form id="login-form" class="form-horizontal">
+          <div class="form-group login__email">
+            <label for="login-email" class="col-sm-3 control-label">メールアドレス</label>
+            <div class="col-sm-9">
+              <input type="email" class="form-control" id="login-email" required>
+            </div>
+          </div>
+          <div class="form-group login__password">
+            <label for="login-password" class="col-sm-3 control-label">パスワード</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="login-password" required>
+              <p class="help-block">初めての方は、登録するパスワードを入力してください</p>
+            </div>
+          </div>
+
+          <div class="col-sm-offset-3 col-sm-9 alert alert-danger login__help"></div>
+          <div class="form-group login__submit">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button type="submit" class="btn btn-primary login__submit-button">ログイン</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section><!-- /#login -->
+
+    <!-- チャット画面 -->
+    <section id="chat" class="view">
+      <!-- ナビゲーションバー -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <!-- 画面幅が狭い時に表示されるハンバーガーメニュー -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">ナビゲーションの表示切り替え</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            <!-- ホームリンク -->
+            <a href="./index.html" class="navbar-brand" aria-label="ホーム"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+          </div><!--/.navbar-header -->
+
+          <!-- メニュー -->
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle room-list-menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ルーム</a>
+                <ul class="dropdown-menu room-list">
+                  <li><a href="#createRoomModal" class="craete-room-link" data-toggle="modal">新しいルームを作成</a></li>
+                  <li class="delete-room-menuitem"><a href="#deleteRoomModal" data-toggle="modal">現在のルームを削除</a></li>
+                  <li role="separator" class="divider"></li>
+                </ul>
+              </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle menu-profile" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="menu-profile-name"></span><img class="menu-profile-image" src="img/default-profile-image.png" width="46" height="46" alt="プロフィール画像"></a>
+                <ul class="dropdown-menu">
+                  <li><a class="room-settings-link" data-toggle="modal" href="#settingsModal">設定</a></li>
+                  <li><a class="favorites-list-link" data-toggle="modal" href="#favoritesListModal">お気に入り一覧</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#" class="logout__link">ログアウト</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.navbar-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+      <!-- メッセージ表示部 -->
+      <div class="message-list clearfix"></div>
+
+      <!-- メッセージ投稿フォーム -->
+      <form class="comment-form">
+        <div class="input-group">
+          <input type="text" class="form-control input-lg comment-form__text">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-lg btn-default comment-form__submit" aria-label="送信"><span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
+          </span>
+        </div><!-- /.input-group -->
+      </form><!-- /.comment-form -->
+    </section><!-- /#chat -->
+
+
+    <!-- Firebaseのセットアップコード（以下のSDKのバージョンは5.4.1） -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-storage.js"></script>
+    <!-- apiKeyなどは、ご自身の環境のものに合わせてください -->
+    <script>
+      // Initialize Firebase
+      var config = {
+        //Firebaseの設定を入力
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- 外部ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    
+    <!-- 自サイトのJavaScript -->
+    <script src="js/main.js"></script>
+  </body>
+</html>
